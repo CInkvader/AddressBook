@@ -5,18 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AddressBook"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1100" Background="#FF0F141A">
+        Title="MainWindow" Height="800" Width="1100" Background="#FF0F141A">
     <Grid>
-        <StackPanel Height="450" Width="1000" Orientation="Horizontal">
-            <StackPanel Height="450" Width="600" Orientation="Vertical" Background="#FF131A23">
+        <StackPanel Height="650" Width="1000" Orientation="Horizontal">
+            <StackPanel x:Name="stpSearch" Height="650" Width="600" Orientation="Vertical" Background="#FF131A23">
                 <StackPanel Height="80">
-                    <Border Height="40" Margin="45 20 45 20" BorderThickness="1" BorderBrush="Transparent" CornerRadius="20" Background="#FF182931">
-                        <TextBox Height="30" Margin="40 0 40 0" TextAlignment="Left" FontSize="22" CaretBrush="#FFBFC7D2"
+                    <Border Height="50" Margin="45 20 45 20" BorderThickness="1" BorderBrush="Transparent" CornerRadius="25" Background="#FF182931">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="icoSearch.png" Height="20" Width="20" Margin="10"/>
+                            <TextBox Height="30" Margin="0 0 40 0" Width="450" TextAlignment="Left" FontSize="22" CaretBrush="#FFBFC7D2"
                              BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2"/>
+                        </StackPanel>
                     </Border>
                 </StackPanel>
-                <StackPanel>
-                    <ListView x:Name="lvContacts" Margin="45 0 45 0" Height="370" BorderThickness="0"
+                <StackPanel Margin="0 15 0 0">
+                    <ListView x:Name="lvContacts" Margin="45 0 45 0" Height="570" BorderThickness="0"
                           Background="Transparent" Foreground="#FFBFC7D2"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -26,17 +29,16 @@
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type ListViewItem}">
                                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
-                                                    Background="{TemplateBinding Background}" CornerRadius="10" Height="40"
+                                                    Background="{TemplateBinding Background}" CornerRadius="10" Height="50" Width="500"
                                                     Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
                                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                             </Border>
-
                                             <ControlTemplate.Triggers>
                                                 <MultiTrigger>
                                                     <MultiTrigger.Conditions>
                                                         <Condition Property="IsMouseOver" Value="True"/>
                                                     </MultiTrigger.Conditions>
-                                                    <Setter Property="Background" TargetName="Bd" Value="#FF242F33"/>
+                                                    <Setter Property="Background" TargetName="Bd" Value="#B241474C"/>
                                                     <Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
                                                 </MultiTrigger>
                                                 <MultiTrigger>
@@ -44,7 +46,7 @@
                                                         <Condition Property="Selector.IsSelectionActive" Value="False"/>
                                                         <Condition Property="IsSelected" Value="True"/>
                                                     </MultiTrigger.Conditions>
-                                                    <Setter Property="Background" TargetName="Bd" Value="#FF2D373A"/>
+                                                    <Setter Property="Background" TargetName="Bd" Value="#D841474C"/>
                                                     <Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
                                                     <Setter Property="Foreground" Value="White"/>
                                                 </MultiTrigger> 
@@ -53,7 +55,7 @@
                                                         <Condition Property="Selector.IsSelectionActive" Value="True"/>
                                                         <Condition Property="IsSelected" Value="True"/>
                                                     </MultiTrigger.Conditions>
-                                                    <Setter Property="Background" TargetName="Bd" Value="#FF3E484C"/>
+                                                    <Setter Property="Background" TargetName="Bd" Value="#FF41474C"/>
                                                     <Setter Property="BorderBrush" TargetName="Bd" Value="Transparent"/>
                                                     <Setter Property="Foreground" Value="White"/>
                                                 </MultiTrigger>
@@ -64,16 +66,89 @@
                                         </ControlTemplate>
                                     </Setter.Value>
                                 </Setter>
+                                <Setter Property="FontSize" Value="20"/>
                             </Style>
                         </ListView.ItemContainerStyle>
                     </ListView>
                 </StackPanel>
             </StackPanel>
-            <StackPanel Orientation="Vertical" Width="400" Background="#FF182931">
-                
-                <TextBlock x:Name="tbNoneSelectedMessage" Text="No user selected..."
-                           Foreground="#FF4A6775" FontSize="20" Height="30" Margin="0 220 0 0"
-                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <StackPanel x:Name="stpInformation" Height="650" Width="400" Orientation="Vertical" Background="#FF182931">
+                <StackPanel x:Name="stpProfile" Height="170" Margin="0 0 0 0">
+                    <Border Height="100" Width="100" CornerRadius="50" Margin="0 20 0 0">
+                        <Border.Background>
+                            <ImageBrush Stretch="Fill" ImageSource="DefaultProfile.png"/>
+                        </Border.Background>
+                    </Border>
+                    <TextBlock TextAlignment="Center" FontSize="20" Background="Transparent" Foreground="#FFBFC7D2"
+                             Margin="50 10 50 0" Text="Firstname Lastname" Visibility="Collapsed">
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel x:Name="stpProfileEdit" Orientation="Vertical" Margin="20 -40 20 0">
+                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
+                            <TextBlock Text=" First Name" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="80" HorizontalAlignment="Left"/>
+                            <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
+                            <TextBlock Text=" Last Name" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="80" HorizontalAlignment="Left"/>
+                            <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
+                            <TextBlock Text=" Contact Number" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="120" HorizontalAlignment="Left"/>
+                            <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
+                            <TextBlock Text=" Email" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="45" HorizontalAlignment="Left"/>
+                            <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
+                            <TextBlock Text=" Address" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="63" HorizontalAlignment="Left"/>
+                            <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                        <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
+                            <TextBlock Text=" Notes" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="48" HorizontalAlignment="Left"/>
+                            <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                            </TextBox>
+                        </StackPanel>
+                    </Border>
+                    <Button Height="50" Width="150" Margin="0 40 0 0" BorderThickness="0" Background="#FF6CD4FF"/>
+                </StackPanel>
+                <StackPanel x:Name="stpProfileDetails" Orientation="Vertical" Margin="20 0 20 0" Visibility="Collapsed">
+                    <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
+                        <Border Height="30" Width="30" CornerRadius="50" Margin="0 0 0 0">
+                            <Border.Background>
+                                <ImageBrush Stretch="Fill" ImageSource="DefaultProfile.png"/>
+                            </Border.Background>
+                        </Border>
+                        <TextBox TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" Margin="15 0 0 0"
+                 BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="330">
+                        </TextBox>
+                    </StackPanel>
+                </StackPanel>
+                <TextBlock x:Name="tbNoneSelectedMessage" Text="No user selected..." 
+                           Foreground="#FF4A6775" FontSize="20" Height="30" Margin="0 0 0 0"
+                           HorizontalAlignment="Center" VerticalAlignment="Top" Visibility="Collapsed"/>
             </StackPanel>
         </StackPanel>
     </Grid>

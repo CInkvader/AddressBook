@@ -21,7 +21,7 @@ namespace AddressBook
             for (int i = 0; i < 20; ++i)
             {
                 _listViewItem = new ListViewItem();
-                _listViewItem.Content = "Christian" + i;
+                _listViewItem.Content = "Christian Arthur" + i;
                 _listViewItem.Tag = "Lorilla";
                 lvContacts.Items.Add(_listViewItem);
             }
