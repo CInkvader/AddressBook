@@ -7,8 +7,8 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1100" Background="#FF0F141A">
     <Grid>
-        <StackPanel Height="650" Width="1000" Orientation="Horizontal">
-            <StackPanel x:Name="stpSearch" Height="650" Width="600" Orientation="Vertical" Background="#FF131A23">
+        <StackPanel Height="700" Width="1000" Orientation="Horizontal">
+            <StackPanel x:Name="stpSearch" Height="700" Width="600" Orientation="Vertical" Background="#FF131A23">
                 <StackPanel Height="80">
                     <Border Height="50" Margin="45 20 45 20" BorderThickness="1" BorderBrush="Transparent" CornerRadius="25" Background="#FF182931">
                         <StackPanel Orientation="Horizontal">
@@ -72,7 +72,17 @@
                     </ListView>
                 </StackPanel>
             </StackPanel>
-            <StackPanel x:Name="stpInformation" Height="650" Width="400" Orientation="Vertical" Background="#FF182931">
+            <StackPanel x:Name="stpInformation" Height="700" Width="400" Orientation="Vertical" Background="#FF182931">
+                <StackPanel>
+                    <Button Height="30" Width="60" Margin="10 20 0 0" BorderThickness="0" Background="LightGray"
+                            Foreground="Black" Content="Back" FontSize="15" HorizontalAlignment="Left">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="15"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
                 <StackPanel x:Name="stpProfile" Height="170" Margin="0 0 0 0">
                     <Border Height="100" Width="100" CornerRadius="50" Margin="0 20 0 0">
                         <Border.Background>
@@ -132,8 +142,16 @@
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Button Height="50" Width="150" Margin="0 40 0 0" BorderThickness="0" Background="#FF6CD4FF"/>
+                    <Button Height="50" Width="150" Margin="0 35 0 0" BorderThickness="0" Background="#FF6CD4FF"
+                            Foreground="Black" Content="Save Changes" FontSize="15">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="5"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                 </StackPanel>
+                
                 <StackPanel x:Name="stpProfileDetails" Orientation="Vertical" Margin="20 0 20 0" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" Margin="0 20 0 0">
                         <Border Height="30" Width="30" CornerRadius="50" Margin="0 0 0 0">
