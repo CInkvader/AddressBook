@@ -10,6 +10,10 @@
 
   <ItemGroup>
     <None Remove="DefaultProfile.png" />
+    <None Remove="icoAddress.png" />
+    <None Remove="icoEmail.png" />
+    <None Remove="icoNotes.png" />
+    <None Remove="icoPhone.png" />
     <None Remove="icoSearch.png" />
   </ItemGroup>
 
@@ -17,7 +21,22 @@
     <Content Include="DefaultProfile.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="icoAddress.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icoEmail.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="icoNotes.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="icoSearch.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="icoPhone.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
