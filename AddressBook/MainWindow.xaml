@@ -4,6 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AddressBook"
+        
+        xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="1100" Background="#FF0F141A">
     <Grid>
@@ -14,15 +16,38 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Source="icoSearch.png" Height="20" Width="20" Margin="15 10 10 10"/>
                             <TextBox x:Name="tbSearchBar" Height="30" Margin="0 0 40 0" Width="450" TextAlignment="Left" FontSize="22" CaretBrush="#FFBFC7D2"
-                             BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" TextChanged="tbSearchBar_TextChanged"/>
+                             BorderThickness="0" Background="Transparent" Foreground="White" TextChanged="tbSearchBar_TextChanged"/>
                         </StackPanel>
                     </Border>
                 </StackPanel>
                 <StackPanel Margin="0 15 0 0" Height="570">
-                    <ListView x:Name="lvContacts" Margin="45 0 45 0" Height="570" BorderThickness="0"
-                          Background="Transparent" Foreground="#FFBFC7D2"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                          ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionChanged="lvContacts_SelectionChanged">
+                    <ListView x:Name="lvContacts" IsSynchronizedWithCurrentItem="True"
+                              Margin="45 0 45 0" Height="570" BorderThickness="0"
+                              Background="Transparent" Foreground="White"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              ScrollViewer.VerticalScrollBarVisibility="Disabled" SelectionChanged="lvContacts_SelectionChanged">
+                        <ListView.Style>
+                            <Style TargetType="ListView">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListView">
+                                            <Border Background="{TemplateBinding Background}"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ScrollViewer>
+                                                    <ItemsPresenter/>
+                                                </ScrollViewer>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Background" Value="Transparent"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListView.Style>
                         <ListView.ItemContainerStyle>
                             <Style TargetType="{x:Type ListViewItem}">
                                 <Setter Property="Template">
@@ -31,7 +56,9 @@
                                             <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}"
                                                     Background="{TemplateBinding Background}" CornerRadius="10" Height="50" Width="500"
                                                     Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                  SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                                  VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <MultiTrigger>
@@ -60,7 +87,7 @@
                                                     <Setter Property="Foreground" Value="White"/>
                                                 </MultiTrigger>
                                                 <Trigger Property="IsEnabled" Value="False">
-                                                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                                    <Setter Property="TextElement.Foreground" TargetName="Bd" Value="White"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -87,15 +114,33 @@
                 <TextBlock x:Name="LeftControlBlock" Height="700" Margin="0 -665 0 0" Visibility="Collapsed" Background="#66000000"/>
             </StackPanel>
             <StackPanel x:Name="stpInformation" Height="700" Width="400" Orientation="Vertical" Background="#FF182931">
-                <StackPanel x:Name="stpProfileTools" Orientation="Horizontal" Visibility="Collapsed">
+
+                <StackPanel Height="50" x:Name="stpProfileTools" Orientation="Horizontal" Visibility="Collapsed">
                     <Button x:Name="btnProfileEditBack" Click="btnProfileEditBack_Click"
                             Height="30" Width="60" Margin="10 20 0 0" BorderThickness="0" Background="#FF6CD4FF"
                             Foreground="Black" Content="Back" FontSize="15" HorizontalAlignment="Left" Visibility="Hidden">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="15"/>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="Border" Property="Opacity" Value="1"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" TargetName="Border" Value="#FFBEE6FD"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                             </Style>
-                        </Button.Resources>
+                        </Button.Style>
                     </Button>
                     <TextBlock x:Name="tbProfileEditBanner" Text="Edit Contact" Visibility="Hidden"
                                FontSize="25" Width="260" TextAlignment="Center" Margin="0 20 0 0" Padding="10 0 10 0"
@@ -103,86 +148,154 @@
                     <Button x:Name="btnProfileEdit" Visibility="Visible" Click="btnProfileEdit_Click"
                             Height="30" Width="60" Margin="0 20 0 0" BorderThickness="0" Background="#FF6CD4FF"
                             Foreground="Black" Content="Edit" FontSize="15" HorizontalAlignment="Left">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="15"/>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="Border" Property="Opacity" Value="1"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" TargetName="Border" Value="#FFBEE6FD"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                             </Style>
-                        </Button.Resources>
+                        </Button.Style>
                     </Button>
                 </StackPanel>
-                 
+
                 <StackPanel x:Name="stpProfileIcon" Height="170" Margin="0 0 0 0" Visibility="Collapsed">
                     <Border Height="100" Width="100" CornerRadius="50" Margin="0 20 0 0">
                         <Border.Background>
                             <ImageBrush Stretch="Fill" ImageSource="DefaultProfile.png"/>
                         </Border.Background>
                     </Border>
-                    <TextBlock x:Name="tbProfileDisplayName" Visibility="Visible"
+                    <TextBlock x:Name="tbProfileDisplayName" Visibility="Collapsed"
                                TextAlignment="Center" FontSize="20" Background="Transparent"
                                Foreground="#FFBFC7D2" Margin="50 10 50 0" Text="Firstname Lastname" >
                     </TextBlock>
                 </StackPanel>
 
-                <StackPanel x:Name="stpProfileEdit" Orientation="Vertical" Margin="20 -40 20 0" Visibility="Collapsed">
-                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                <StackPanel x:Name="stpProfileEdit" Height="520" Orientation="Vertical" Margin="20 -40 20 0" Visibility="Collapsed">
+                    <Border Height="45" Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                         <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
                             <TextBlock Text=" First Name" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="80" HorizontalAlignment="Left"/>
                             <TextBox x:Name="tbxFirstName" TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
-                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10" TextChanged="tbxFirstName_TextChanged">
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                    <Border Height="45" Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                         <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
                             <TextBlock Text=" Last Name" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="80" HorizontalAlignment="Left"/>
                             <TextBox x:Name="tbxLastName" TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
-                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10" TextChanged="tbxLastName_TextChanged">
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                    <Border Height="45" Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                         <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
                             <TextBlock Text=" Contact Number" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="120" HorizontalAlignment="Left"/>
                             <TextBox x:Name="tbxPhone" TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
-                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10" TextChanged="tbxPhone_TextChanged">
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                    <Border Height="45" Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                         <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
                             <TextBlock Text=" Email" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="45" HorizontalAlignment="Left"/>
                             <TextBox x:Name="tbxEmail" TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
-                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10" TextChanged="tbxEmail_TextChanged">
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                    <Border Height="45" Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                         <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
                             <TextBlock Text=" Address" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="63" HorizontalAlignment="Left"/>
                             <TextBox x:Name="tbxAddress" TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
-                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10" TextChanged="tbxAddress_TextChanged">
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Border Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
+                    <Border Height="45" Margin="0 20 0 0" BorderBrush="White" BorderThickness="1" CornerRadius="5">
                         <StackPanel Orientation="Vertical" Margin="20 -12 20 0">
-                            <TextBlock Text=" Notes" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="48" HorizontalAlignment="Left"/>
+                            <TextBlock Height="20" Text=" Notes" Foreground="#FFBFC7D2" FontSize="15" Background="#FF182931" Width="48" HorizontalAlignment="Left"/>
                             <TextBox x:Name="tbxNotes" TextAlignment="Left" FontSize="20" CaretBrush="#FFBFC7D2" HorizontalAlignment="Left"
-                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10">
+                                     BorderThickness="0" Background="Transparent" Foreground="#FFBFC7D2" Width="320" Margin="0 0 0 10" TextChanged="tbxNotes_TextChanged">
                             </TextBox>
                         </StackPanel>
                     </Border>
-                    <Button x:Name="btnProfileEditSave" Click="btnProfileEditSave_Click"
-                            Height="50" Width="150" Margin="0 35 0 0" BorderThickness="0" Background="#FF6CD4FF"
+                    <Button x:Name="btnProfileEditSave" Click="btnProfileEditSave_Click" IsEnabled="True"
+                            Height="50" Width="150" Margin="0 40 0 35" BorderThickness="0" Background="#FF6CD4FF"
                             Foreground="Black" Content="Save Changes" FontSize="15">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="5"/>
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="Border" Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" 
+                                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter TargetName="Border" Property="Opacity" Value="0.3"/>
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" TargetName="Border" Value="#FFBEE6FD"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
                             </Style>
-                        </Button.Resources>
+                        </Button.Style>
                     </Button>
                 </StackPanel>
-                
+
+                <StackPanel x:Name="stpConfirmScreen" Visibility="Collapsed"
+                            Height="700" Margin="0 -700 0 0" Background="#66000000" >
+                    <Border Margin="0 272.5 0 0" Background="#FF1C2F46" Width="330" CornerRadius="15">
+                        <StackPanel Height="155">
+                            <TextBlock x:Name="tbConfirmScreen" Height="100" Width="300" FontSize="20"
+                                Text="You have unsaved changes! Discard changes and continue?" Padding="0 20 0 0"
+                                       TextWrapping="Wrap" TextAlignment="Center" Foreground="White"/>
+                            <StackPanel Height="50" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button x:Name="btnCancel" Click="btnCancel_Click"
+                                        Height="40" Width="150" Margin="0 0 10 0" BorderThickness="2"
+                                        Background="Transparent" BorderBrush="#FFB5B5B5"
+                                        Foreground="#FFB5B5B5" Content="Cancel" FontSize="15">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="15"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button x:Name="btnConfirm" Click="btnConfirm_Click"
+                                Height="40" Width="150" Margin="0 0 0 0" BorderThickness="0" Background="#FF6CD4FF"
+                                Foreground="Black" Content="Discard Changes" FontSize="15">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="15"/>
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
                 <StackPanel x:Name="stpProfileDetails" Orientation="Vertical" Margin="20 0 20 0" Visibility="Collapsed">
                     <StackPanel Orientation="Horizontal" Margin="0 40 0 0">
                         <Border Height="30" Width="30" Margin="0 0 0 0">
@@ -225,7 +338,7 @@
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
-                
+
                 <TextBlock x:Name="tbNoneSelectedMessage" Text="No contact selected..." Visibility="Visible"
                            Foreground="#FF4A6775" FontSize="20" Height="30" Margin="0 350 0 0"
                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
