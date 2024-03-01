@@ -9,6 +9,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.IO;
+using Microsoft.VisualBasic.FileIO;
+using System.Data;
 
 namespace AddressBook
 {
@@ -19,19 +22,23 @@ namespace AddressBook
         private Random _random = new Random();
 
         private ContactInformation _selectedContact = new ContactInformation();
-
         private bool _editMode = false;
         private bool _addMode = false;
         private bool _confirmChangeMode = false;
+
+        private string _CSVPath = string.Empty;
 
         public MainWindow()
         {
             InitializeComponent();
 
             _tbxEntries = new TextBox[] { tbxFirstName, tbxLastName, tbxPhone, tbxEmail, tbxAddress, tbxNotes };
+            _CSVPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Contacts.csv");
 
+            RetrieveCSVData();
             SortContacts();
             FindSearchResult();
+            Closing += MainWindow_Close;
         }
 
         private void ShowEditFields(string banner)
@@ -146,7 +153,6 @@ namespace AddressBook
             _selectedContact.Address = tbxAddress.Text;
             _selectedContact.Notes = tbxNotes.Text;
         }
-
         private bool HasDuplicateID(string ID)
         {
             foreach(ContactInformation contact in _contacts)
@@ -351,6 +357,13 @@ namespace AddressBook
             {
                 UpdateContact();
                 FindSearchResult();
+                foreach (ListViewItem contact in lvContacts.Items)
+                {
+                    if (contact.Tag.ToString() == _selectedContact.Identification)
+                    {
+                        lvContacts.SelectedItem = contact;
+                    }
+                }
                 _confirmChangeMode = false;
             }
             ShowConfirmScreen(false);
@@ -384,8 +397,68 @@ namespace AddressBook
         private void tbxNotes_TextChanged(object sender, TextChangedEventArgs e)
         {
             CheckEntriesComplete();
-        } 
+        }
         #endregion
+
+        private void MainWindow_Close(object? sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (sender == null || e == null)
+            {
+                return;
+            }
+            WriteToCSVData();
+        }
+        private void RetrieveCSVData()
+        {
+            using (TextFieldParser parser = new TextFieldParser(_CSVPath))
+            {
+                parser.TextFieldType = FieldType.Delimited;
+                parser.SetDelimiters(",");
+
+                while (!parser.EndOfData)
+                {
+                    string[]? strings = parser.ReadFields();
+                    string[] fields = strings == null ? [] : strings;
+                    if (fields == null)
+                    {
+                        continue;
+                    }
+                    if (fields.Length != 7)
+                    {
+                        continue;
+                    }
+                    ContactInformation newContact = new ContactInformation();
+                    newContact.Identification = fields[0];
+                    newContact.FirstName = fields[1];
+                    newContact.LastName = fields[2];
+                    newContact.Phone = fields[3];
+                    newContact.Email = fields[4];
+                    newContact.Address = fields[5];
+                    newContact.Notes = fields[6];
+
+                    _contacts.Add(newContact);
+                }
+            }
+        }
+        private void WriteToCSVData()
+        {
+            using (StreamWriter writer = new StreamWriter(_CSVPath, false))
+            {
+                foreach (ContactInformation contact in _contacts)
+                {
+                    StringBuilder data = new StringBuilder();
+                    data.Append(contact.Identification).Append(',');
+                    data.Append(contact.FirstName).Append(',');
+                    data.Append(contact.LastName).Append(',');
+                    data.Append(contact.Phone).Append(',');
+                    data.Append(contact.Email).Append(',');
+                    data.Append(contact.Address).Append(',');
+                    data.Append(contact.Notes);
+
+                    writer.WriteLine(data.ToString());
+                }
+            }
+        }
 
         private class ContactInformation
         {

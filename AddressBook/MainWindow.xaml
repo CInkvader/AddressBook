@@ -7,7 +7,7 @@
         
         xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1100" Background="#FF0F141A">
+        Title="Address Book" Height="800" Width="1100" Background="#FF0F141A">
     <Grid>
         <StackPanel Height="700" Width="1000" Orientation="Horizontal">
             <StackPanel x:Name="stpSearch" Height="700" Width="600" Orientation="Vertical" Background="#FF131A23">
