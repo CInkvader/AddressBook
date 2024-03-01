@@ -16,9 +16,13 @@ namespace AddressBook
     {   
         private List<ContactInformation> _contacts = new List<ContactInformation>();
         private TextBox[] _tbxEntries = new TextBox[] { };
+        private Random _random = new Random();
+
+        private ContactInformation _selectedContact = new ContactInformation();
 
         private bool _editMode = false;
         private bool _addMode = false;
+        private bool _confirmChangeMode = false;
 
         public MainWindow()
         {
@@ -70,6 +74,7 @@ namespace AddressBook
             _editMode = true;
             tbSearchBar.IsEnabled = false;
             lvContacts.IsEnabled = false;
+            SetEditInfo();
         }
         private void SetContactAddMode()
         {
@@ -96,11 +101,76 @@ namespace AddressBook
             lvContacts.Items.Clear();
             tbNoResultMessage.Visibility = Visibility.Visible;
         }
-        
+
+        private void AddContact()
+        {
+            ContactInformation contact = new ContactInformation();
+
+            string ID = string.Empty;
+            do
+            {
+                ID = string.Empty;
+                ID = _random.Next(1, 99999).ToString();
+                ID += _random.Next(1, 99999).ToString();
+                while (ID.Length != 10)
+                {
+                    ID = '0' + ID;
+                }
+            } while (HasDuplicateID(ID));
+
+            contact.Identification = ID;
+            contact.FirstName = tbxFirstName.Text;
+            contact.LastName = tbxLastName.Text;
+            contact.Phone = tbxPhone.Text;
+            contact.Email = tbxEmail.Text;
+            contact.Address = tbxAddress.Text;
+            contact.Notes = tbxNotes.Text;
+
+            _contacts.Add(contact);
+        }
+        private void SetEditInfo()
+        {
+            tbxFirstName.Text = _selectedContact.FirstName;
+            tbxLastName.Text = _selectedContact.LastName;
+            tbxPhone.Text = _selectedContact.Phone;
+            tbxEmail.Text = _selectedContact.Email;
+            tbxAddress.Text = _selectedContact.Address;
+            tbxNotes.Text = _selectedContact.Notes;
+        }
+        private void UpdateContact()
+        {
+            _selectedContact.FirstName = tbxFirstName.Text;
+            _selectedContact.LastName = tbxLastName.Text;
+            _selectedContact.Phone = tbxPhone.Text;
+            _selectedContact.Email = tbxEmail.Text;
+            _selectedContact.Address = tbxAddress.Text;
+            _selectedContact.Notes = tbxNotes.Text;
+        }
+
+        private bool HasDuplicateID(string ID)
+        {
+            foreach(ContactInformation contact in _contacts)
+            {
+                if (contact.Identification == ID)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void ShowContactProfile(ContactInformation contact)
+        {
+            tbPhone.Text = contact.Phone;
+            tbEmail.Text = contact.Email;
+            tbAddress.Text = contact.Address;
+            tbNotes.Text = contact.Notes;
+        }
         private void ShowBackScreen(bool show)
         {
             if (show)
             {
+                _confirmChangeMode = false;
                 stpConfirmScreen.Visibility = Visibility.Visible;
 
                 tbConfirmScreen.Text = "You have unsaved changes! Discard changes and continue?";
@@ -116,6 +186,7 @@ namespace AddressBook
         {
             if (show)
             {
+                _confirmChangeMode = true;
                 stpConfirmScreen.Visibility = Visibility.Visible;
 
                 tbConfirmScreen.Text = "Are you sure the contact information is correct?";
@@ -141,6 +212,7 @@ namespace AddressBook
         {
             int resultCount = 0;
             lvContacts.Items.Clear();
+            SortContacts();
             
             foreach (ContactInformation contact in _contacts)
             {
@@ -152,7 +224,7 @@ namespace AddressBook
 
                     listContact = new ListViewItem();
                     listContact.Content = fullname;
-                    listContact.Tag = fullname;
+                    listContact.Tag = contact.Identification;
                     lvContacts.Items.Add(listContact);
 
                     resultCount++;
@@ -193,6 +265,29 @@ namespace AddressBook
         private void lvContacts_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             SetContactViewMode();
+            ListViewItem selectedContact = (ListViewItem)lvContacts.SelectedItem;
+
+            if (selectedContact != null)
+            {
+                string? ID = selectedContact.Tag.ToString();
+                foreach (ContactInformation contact in _contacts)
+                {
+                    if (contact.Identification == ID)
+                    {
+                        _selectedContact = contact;
+                    }
+                }
+                tbProfileDisplayName.Text = _selectedContact.FirstName + " " + _selectedContact.LastName;
+                ShowContactProfile(_selectedContact);
+                if (_selectedContact.Notes == string.Empty)
+                {
+                    stpNotes.Visibility = Visibility.Hidden;
+                }
+                else
+                {
+                    stpNotes.Visibility = Visibility.Visible;
+                }
+            }
         }
         private void btnProfileEdit_Click(object sender, RoutedEventArgs e)
         {
@@ -232,26 +327,35 @@ namespace AddressBook
                 entry.Clear();
             }
         }
+
         private void btnAddContact_Click(object sender, RoutedEventArgs e)
         {
             tbSearchBar.Clear();
             SetContactAddMode();
         }
-
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
             ShowConfirmScreen(false);
         }
         private void btnConfirm_Click(object sender, RoutedEventArgs e)
         {
+            if (_addMode && _confirmChangeMode)
+            {
+                AddContact();
+                lvContacts.UnselectAll();
+                SetContactNoneSelected();
+                FindSearchResult();
+                _confirmChangeMode = false;
+            }
+            else if (_editMode && _confirmChangeMode)
+            {
+                UpdateContact();
+                FindSearchResult();
+                _confirmChangeMode = false;
+            }
             ShowConfirmScreen(false);
             StopProfileManage();
 
-            if (_addMode)
-            {
-                lvContacts.UnselectAll();
-                SetContactNoneSelected();
-            }
             _editMode = false;
             _addMode = false;
         }
