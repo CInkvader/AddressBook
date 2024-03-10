@@ -35,7 +35,8 @@ namespace AddressBook
             _tbxEntries = new TextBox[] { tbxFirstName, tbxLastName, tbxPhone, tbxEmail, tbxAddress, tbxNotes };
             _CSVPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Contacts.csv");
 
-            RetrieveCSVData();
+            if (File.Exists(_CSVPath))
+                RetrieveCSVData();
             SortContacts();
             FindSearchResult();
             Closing += MainWindow_Close;
